@@ -203,7 +203,7 @@ def autotag_pdf_with_options(filename, client_id, client_secret):
         )
         client_config = ClientConfig(
             connect_timeout=8000,
-            read_timeout=40000
+            read_timeout=300000
         )
 
         # Creates a PDF Services instance
@@ -273,7 +273,7 @@ def extract_api(filename, client_id, client_secret):
         )
         client_config = ClientConfig(
             connect_timeout=4000,
-            read_timeout=40000
+            read_timeout=300000
             )
         # Creates a PDF Services instance
         pdf_services = PDFServices(credentials=credentials, client_config=client_config)
