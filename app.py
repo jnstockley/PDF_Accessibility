@@ -55,33 +55,11 @@ class PDFAccessibility(Stack):
                                                              ),
                                                              outputs=["type=image,compression=zstd,compression-level=3,force-compression=true"])
 
-        # VPC with Public and Private Subnets
-        pdf_processing_vpc = ec2.Vpc(self, "PdfProcessingVpc",
-            max_azs=2,
-            nat_gateways=1,
-            subnet_configuration=[
-                ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.PUBLIC,
-                    name="PdfProcessingPublic",
-                    cidr_mask=24,
-                ),
-                ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS,
-                    name="PdfProcessingPrivate",
-                    cidr_mask=24,
-                ),
-            ]
-        )
-
-        # VPC Endpoints for faster ECR image pulls (reduces cold start by 10-15s)
-        pdf_processing_vpc.add_interface_endpoint("EcrApiEndpoint",
-            service=ec2.InterfaceVpcEndpointAwsService.ECR
-        )
-        pdf_processing_vpc.add_interface_endpoint("EcrDockerEndpoint",
-            service=ec2.InterfaceVpcEndpointAwsService.ECR_DOCKER
-        )
-        pdf_processing_vpc.add_gateway_endpoint("S3Endpoint",
-            service=ec2.GatewayVpcEndpointAwsService.S3
+        # Import existing VPC from its-vpc stack output
+        pdf_processing_vpc = ec2.Vpc.from_vpc_attributes(self, "PdfProcessingVpc",
+                                                         vpc_id=cdk.Fn.import_value("VPCId"),
+                                                         availability_zones=[cdk.Fn.import_value("PrivateSubnetAAZ")],
+                                                         private_subnet_ids=[cdk.Fn.import_value("PrivateSubnetA")],
         )
 
         # ECS Cluster
