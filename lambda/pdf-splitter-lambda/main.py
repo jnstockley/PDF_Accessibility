@@ -143,7 +143,7 @@ def lambda_handler(event, context):
         pdf_file_content = response['Body'].read()
   
         # Split the PDF into pages and upload them to S3
-        chunks = split_pdf_into_pages(pdf_file_content, pdf_file_key, s3, bucket_name, 5) # Original was 200, 10 still failed with `SLIDE4L.pdf`
+        chunks = split_pdf_into_pages(pdf_file_content, pdf_file_key, s3, bucket_name, 1) # Original was 200, 10 still failed with `SLIDE4L.pdf`, 5 also did not work
         
         log_chunk_created(file_basename)
 
