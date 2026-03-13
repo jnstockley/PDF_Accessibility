@@ -57,9 +57,9 @@ class PDFAccessibility(Stack):
 
         # Import existing VPC from its-vpc stack output
         pdf_processing_vpc = ec2.Vpc.from_vpc_attributes(self, "PdfProcessingVpc",
-                                                         vpc_id=cdk.Fn.import_value("VPCId"),
-                                                         availability_zones=[cdk.Fn.import_value("PrivateSubnetAAZ")],
-                                                         private_subnet_ids=[cdk.Fn.import_value("PrivateSubnetA")],
+                                                         vpc_id=cdk.Fn.import_value("its-vpc-VPCId"),
+                                                         availability_zones=[cdk.Fn.import_value("its-vpc-PrivateSubnetAAZ")],
+                                                         private_subnet_ids=[cdk.Fn.import_value("its-vpc-PrivateSubnetA-ID")],
         )
 
         # ECS Cluster
